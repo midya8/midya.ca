@@ -15,48 +15,14 @@ type QualityProfile = {
   flightStars: number;
   galaxyStars: number;
   dust: number;
-  asteroids: number;
   clouds: number;
   constellationClusters: number;
-  objectDetail: number;
-  objectScale: number;
-  recycleDepthScale: number;
   bloomStrength: number;
   frameInterval: number;
 };
 
 type NavigatorWithMemory = Navigator & {
   deviceMemory?: number;
-};
-
-type CelestialMotion = {
-  object: THREE.Object3D;
-  kind:
-    | "saturn"
-    | "sun"
-    | "station"
-    | "moon"
-    | "planet";
-  speed: number;
-  baseX: number;
-  baseY: number;
-  phase: number;
-  orbitX: number;
-  orbitY: number;
-  pathSpeed: number;
-  spinX: number;
-  spinY: number;
-  scaleMin: number;
-  scaleMax: number;
-};
-
-type AsteroidMotion = {
-  mesh: THREE.Mesh<THREE.DodecahedronGeometry, THREE.MeshStandardMaterial>;
-  speed: number;
-  driftX: number;
-  driftY: number;
-  spinX: number;
-  spinY: number;
 };
 
 type CloudMotion = {
@@ -79,12 +45,8 @@ function getQualityProfile(): QualityProfile {
       flightStars: 580,
       galaxyStars: 800,
       dust: 100,
-      asteroids: 4,
       clouds: 1,
       constellationClusters: 10,
-      objectDetail: 16,
-      objectScale: 0.82,
-      recycleDepthScale: 1.35,
       bloomStrength: 0.38,
       frameInterval: 1000 / 40,
     };
@@ -97,12 +59,8 @@ function getQualityProfile(): QualityProfile {
       flightStars: 1100,
       galaxyStars: 1650,
       dust: 220,
-      asteroids: 7,
       clouds: 2,
       constellationClusters: 18,
-      objectDetail: 24,
-      objectScale: 0.92,
-      recycleDepthScale: 1.15,
       bloomStrength: 0.5,
       frameInterval: 1000 / 55,
     };
@@ -114,12 +72,8 @@ function getQualityProfile(): QualityProfile {
     flightStars: 1800,
     galaxyStars: 2600,
     dust: 430,
-    asteroids: 10,
     clouds: 3,
     constellationClusters: 26,
-    objectDetail: 36,
-    objectScale: 1,
-    recycleDepthScale: 1,
     bloomStrength: 0.62,
     frameInterval: 1000 / 60,
   };
@@ -509,233 +463,6 @@ function createNebula(): THREE.Mesh<THREE.PlaneGeometry, THREE.ShaderMaterial> {
   return nebula;
 }
 
-function createSaturn(detail: number): THREE.Group {
-  const group = new THREE.Group();
-  const planet = new THREE.Mesh(
-    new THREE.SphereGeometry(
-      1.65,
-      detail,
-      Math.max(12, Math.floor(detail * 0.7)),
-    ),
-    new THREE.MeshStandardMaterial({
-      color: "#827e75",
-      emissive: "#17212c",
-      emissiveIntensity: 0.35,
-      roughness: 0.78,
-      metalness: 0.08,
-    }),
-  );
-  planet.scale.y = 0.94;
-
-  const ring = new THREE.Mesh(
-    new THREE.RingGeometry(2.1, 3.25, detail * 2),
-    new THREE.MeshBasicMaterial({
-      color: "#b7c0c7",
-      transparent: true,
-      opacity: 0.28,
-      side: THREE.DoubleSide,
-      depthWrite: false,
-      blending: THREE.AdditiveBlending,
-    }),
-  );
-  ring.rotation.x = Math.PI / 2.45;
-  ring.rotation.z = -0.2;
-
-  const ringInner = new THREE.Mesh(
-    new THREE.RingGeometry(1.92, 2.04, detail * 2),
-    new THREE.MeshBasicMaterial({
-      color: "#d9e9ff",
-      transparent: true,
-      opacity: 0.15,
-      side: THREE.DoubleSide,
-      depthWrite: false,
-    }),
-  );
-  ringInner.rotation.copy(ring.rotation);
-
-  group.add(planet, ring, ringInner);
-  group.position.set(8.5, -5.7, -18);
-  group.rotation.set(0.08, -0.28, -0.08);
-  return group;
-}
-
-function createSun(detail: number): THREE.Group {
-  const group = new THREE.Group();
-  const core = new THREE.Mesh(
-    new THREE.SphereGeometry(
-      0.78,
-      detail,
-      Math.max(10, Math.floor(detail * 0.7)),
-    ),
-    new THREE.MeshBasicMaterial({ color: "#ffb451" }),
-  );
-  const halo = new THREE.Mesh(
-    new THREE.SphereGeometry(
-      1.42,
-      Math.max(12, detail - 4),
-      Math.max(8, Math.floor(detail * 0.6)),
-    ),
-    new THREE.MeshBasicMaterial({
-      color: "#ff8a32",
-      transparent: true,
-      opacity: 0.12,
-      side: THREE.BackSide,
-      depthWrite: false,
-      blending: THREE.AdditiveBlending,
-    }),
-  );
-  group.add(core, halo);
-  group.position.set(-16, -10, -22);
-  return group;
-}
-
-function createSpaceStation(detail: number): THREE.Group {
-  const group = new THREE.Group();
-  const radialDetail = Math.max(8, Math.floor(detail * 0.5));
-  const metal = new THREE.MeshStandardMaterial({
-    color: "#b5c2cd",
-    emissive: "#122b3b",
-    emissiveIntensity: 0.45,
-    metalness: 0.72,
-    roughness: 0.32,
-  });
-  const panel = new THREE.MeshStandardMaterial({
-    color: "#296fa7",
-    emissive: "#0a5c83",
-    emissiveIntensity: 0.55,
-    metalness: 0.52,
-    roughness: 0.38,
-  });
-  const hull = new THREE.Mesh(
-    new THREE.CylinderGeometry(0.22, 0.28, 2.2, radialDetail),
-    metal,
-  );
-  hull.rotation.z = Math.PI / 2;
-  const ring = new THREE.Mesh(
-    new THREE.TorusGeometry(0.64, 0.08, 8, detail),
-    metal.clone(),
-  );
-  ring.rotation.y = Math.PI / 2;
-  const leftPanel = new THREE.Mesh(
-    new THREE.BoxGeometry(0.9, 0.06, 0.48),
-    panel,
-  );
-  leftPanel.position.x = -1.38;
-  const rightPanel = leftPanel.clone();
-  rightPanel.position.x = 1.38;
-  group.add(hull, ring, leftPanel, rightPanel);
-  group.position.set(0.5, 7.7, -19);
-  group.rotation.set(0.22, -0.3, -0.08);
-  return group;
-}
-
-function createIcePlanet(detail: number): THREE.Group {
-  const group = new THREE.Group();
-  const heightDetail = Math.max(10, Math.floor(detail * 0.7));
-  const planet = new THREE.Mesh(
-    new THREE.SphereGeometry(1.22, detail, heightDetail),
-    new THREE.MeshStandardMaterial({
-      color: "#397fa8",
-      emissive: "#123f63",
-      emissiveIntensity: 0.48,
-      roughness: 0.66,
-      metalness: 0.06,
-    }),
-  );
-  const atmosphere = new THREE.Mesh(
-    new THREE.SphereGeometry(1.38, Math.max(12, detail - 4), heightDetail),
-    new THREE.MeshBasicMaterial({
-      color: "#65dfff",
-      transparent: true,
-      opacity: 0.13,
-      side: THREE.BackSide,
-      depthWrite: false,
-      blending: THREE.AdditiveBlending,
-    }),
-  );
-  const bandMaterial = new THREE.MeshBasicMaterial({
-    color: "#99e9ff",
-    transparent: true,
-    opacity: 0.24,
-    depthWrite: false,
-    blending: THREE.AdditiveBlending,
-  });
-  const bandOffsets = [-0.38, -0.08, 0.28];
-  const bands = bandOffsets.map((offset, index) => {
-    const latitudeRadius = Math.sqrt(1.22 ** 2 - offset ** 2);
-    const band = new THREE.Mesh(
-      new THREE.TorusGeometry(
-        latitudeRadius,
-        0.018 + index * 0.006,
-        5,
-        detail * 2,
-      ),
-      bandMaterial,
-    );
-    band.position.y = offset;
-    band.rotation.x = Math.PI / 2;
-    return band;
-  });
-  group.add(planet, atmosphere, ...bands);
-  group.rotation.z = -0.16;
-  return group;
-}
-
-function isLargeCelestial(kind: CelestialMotion["kind"]): boolean {
-  return kind === "saturn" || kind === "sun" || kind === "planet";
-}
-
-function resetCelestial(
-  motion: CelestialMotion,
-  recycleDepthScale: number,
-  depth?: number,
-): void {
-  const large = isLargeCelestial(motion.kind);
-  const lowerField = motion.kind === "saturn" || motion.kind === "sun";
-  const upperField =
-    motion.kind === "station" ||
-    motion.kind === "planet";
-  const side = Math.random() > 0.5 ? 1 : -1;
-  motion.baseX = large
-    ? side * (11 + Math.random() * 8)
-    : (Math.random() - 0.5) * 30;
-  motion.baseY = lowerField
-    ? -6 - Math.random() * 5
-    : upperField
-      ? 3 + Math.random() * 6
-      : -4 + Math.random() * 10;
-  motion.phase = Math.random() * Math.PI * 2;
-  motion.orbitX = large
-    ? 0.8 + Math.random() * 1.5
-    : 0.7 + Math.random() * 1.5;
-  motion.orbitY = large
-    ? 0.4 + Math.random() * 0.7
-    : 0.45 + Math.random() * 1.1;
-  motion.object.scale.setScalar(
-    THREE.MathUtils.lerp(motion.scaleMin, motion.scaleMax, Math.random()),
-  );
-  motion.object.position.set(
-    motion.baseX,
-    motion.baseY,
-    depth ?? (-82 - Math.random() * 48) * recycleDepthScale,
-  );
-}
-
-function resetAsteroid(motion: AsteroidMotion, depth?: number): void {
-  motion.mesh.position.set(
-    (Math.random() - 0.5) * 42,
-    (Math.random() - 0.5) * 28,
-    depth ?? -72 - Math.random() * 52,
-  );
-  const scale = 0.25 + Math.random() * 0.7;
-  motion.mesh.scale.setScalar(scale);
-  motion.mesh.rotation.set(
-    Math.random() * Math.PI,
-    Math.random() * Math.PI,
-    Math.random() * Math.PI,
-  );
-}
-
 function resetCloud(motion: CloudMotion, depth?: number): void {
   motion.sprite.position.set(
     (Math.random() - 0.5) * 30,
@@ -820,13 +547,6 @@ export function GalaxyBackground({ onReady }: GalaxyBackgroundProps) {
     setFallback(false);
     mount.appendChild(renderer.domElement);
 
-    const ambient = new THREE.AmbientLight("#708dff", 1.5);
-    const keyLight = new THREE.PointLight("#88ddff", 48, 80, 1.7);
-    keyLight.position.set(2, 4, 10);
-    const rimLight = new THREE.PointLight("#8d5cff", 36, 65, 1.8);
-    rimLight.position.set(-12, -4, -2);
-    scene.add(ambient, keyLight, rimLight);
-
     const starTexture = createStarTexture();
     const outerStars = createStarField(quality.stars, 76, starTexture);
     const flightStars = createFlightStars(quality.flightStars);
@@ -836,142 +556,6 @@ export function GalaxyBackground({ onReady }: GalaxyBackgroundProps) {
       quality.constellationClusters,
     );
     const nebula = createNebula();
-    const saturn = createSaturn(quality.objectDetail);
-    const sun = createSun(quality.objectDetail);
-    const station = createSpaceStation(quality.objectDetail);
-    const planet = createIcePlanet(quality.objectDetail);
-    const moon = new THREE.Mesh(
-      new THREE.SphereGeometry(
-        0.42,
-        quality.objectDetail,
-        Math.max(10, Math.floor(quality.objectDetail * 0.7)),
-      ),
-      new THREE.MeshStandardMaterial({
-        color: "#788694",
-        emissive: "#172635",
-        emissiveIntensity: 0.28,
-        roughness: 0.8,
-      }),
-    );
-    const celestialMotions: CelestialMotion[] = [
-      {
-        object: saturn,
-        kind: "saturn",
-        speed: 1.75,
-        baseX: 14,
-        baseY: -8,
-        phase: 0.6,
-        orbitX: 1.7,
-        orbitY: 0.75,
-        pathSpeed: 0.16,
-        spinX: 0.025,
-        spinY: 0.16,
-        scaleMin: 0.72 * quality.objectScale,
-        scaleMax: 0.94 * quality.objectScale,
-      },
-      {
-        object: sun,
-        kind: "sun",
-        speed: 1.2,
-        baseX: -15,
-        baseY: -9,
-        phase: 2.1,
-        orbitX: 1.45,
-        orbitY: 0.65,
-        pathSpeed: 0.13,
-        spinX: 0.01,
-        spinY: 0.1,
-        scaleMin: 0.82 * quality.objectScale,
-        scaleMax: 1.05 * quality.objectScale,
-      },
-      {
-        object: station,
-        kind: "station",
-        speed: 2.5,
-        baseX: 8,
-        baseY: 7,
-        phase: 4.2,
-        orbitX: 1.2,
-        orbitY: 0.65,
-        pathSpeed: 0.24,
-        spinX: 0.05,
-        spinY: 0.58,
-        scaleMin: 0.78 * quality.objectScale,
-        scaleMax: 1.05 * quality.objectScale,
-      },
-      {
-        object: moon,
-        kind: "moon",
-        speed: 3,
-        baseX: -11,
-        baseY: 6,
-        phase: 5.4,
-        orbitX: 1.1,
-        orbitY: 0.8,
-        pathSpeed: 0.27,
-        spinX: 0.12,
-        spinY: 0.25,
-        scaleMin: 0.72 * quality.objectScale,
-        scaleMax: 1.25 * quality.objectScale,
-      },
-      {
-        object: planet,
-        kind: "planet",
-        speed: 1.95,
-        baseX: 15,
-        baseY: 6,
-        phase: 1.3,
-        orbitX: 1.4,
-        orbitY: 0.7,
-        pathSpeed: 0.18,
-        spinX: 0.02,
-        spinY: 0.16,
-        scaleMin: 0.76 * quality.objectScale,
-        scaleMax: 0.98 * quality.objectScale,
-      },
-    ];
-    const initialDepthByKind: Record<CelestialMotion["kind"], number> = {
-      saturn: -44,
-      sun: -78,
-      station: -30,
-      moon: -55,
-      planet: -50,
-    };
-    celestialMotions.forEach((motion) => {
-      motion.object.position.set(
-        motion.baseX,
-        motion.baseY,
-        initialDepthByKind[motion.kind],
-      );
-      motion.object.scale.setScalar((motion.scaleMin + motion.scaleMax) / 2);
-    });
-
-    const asteroidGeometry = new THREE.DodecahedronGeometry(0.5, 0);
-    const asteroidMaterial = new THREE.MeshStandardMaterial({
-      color: "#59636e",
-      roughness: 0.94,
-      metalness: 0.04,
-      flatShading: true,
-    });
-    const asteroids: AsteroidMotion[] = Array.from(
-      { length: quality.asteroids },
-      (_, index) => {
-        const motion: AsteroidMotion = {
-          mesh: new THREE.Mesh(asteroidGeometry, asteroidMaterial),
-          speed: 3.8 + Math.random() * 4.8,
-          driftX: (Math.random() - 0.5) * 0.22,
-          driftY: (Math.random() - 0.5) * 0.16,
-          spinX: (Math.random() - 0.5) * 1.4,
-          spinY: (Math.random() - 0.5) * 1.4,
-        };
-        resetAsteroid(
-          motion,
-          -18 - index * (98 / Math.max(1, quality.asteroids - 1)),
-        );
-        return motion;
-      },
-    );
-
     const cloudTexture = createCloudTexture();
     const clouds: CloudMotion[] = Array.from(
       { length: quality.clouds },
@@ -1005,12 +589,6 @@ export function GalaxyBackground({ onReady }: GalaxyBackgroundProps) {
       dust,
       constellations,
       nebula,
-      saturn,
-      sun,
-      station,
-      moon,
-      planet,
-      ...asteroids.map(({ mesh }) => mesh),
       ...clouds.map(({ sprite }) => sprite),
     );
 
@@ -1095,35 +673,6 @@ export function GalaxyBackground({ onReady }: GalaxyBackgroundProps) {
       constellations.rotation.y = elapsed * 0.0015;
 
       if (!reduceMotion) {
-        celestialMotions.forEach((motion) => {
-          motion.object.position.z += motion.speed * delta;
-          motion.object.position.x =
-            motion.baseX +
-            Math.cos(elapsed * motion.pathSpeed + motion.phase) * motion.orbitX;
-          motion.object.position.y =
-            motion.baseY +
-            Math.sin(elapsed * motion.pathSpeed * 1.15 + motion.phase) *
-              motion.orbitY -
-            scrollProgress * 3;
-          motion.object.rotation.y += delta * motion.spinY;
-          motion.object.rotation.x += delta * motion.spinX;
-          const recycleZ = isLargeCelestial(motion.kind) ? 6 : 14;
-          if (motion.object.position.z > recycleZ) {
-            resetCelestial(motion, quality.recycleDepthScale);
-          }
-        });
-        const stationRing = station.children[1];
-        if (stationRing) stationRing.rotation.z += delta * 0.65;
-
-        asteroids.forEach((motion) => {
-          motion.mesh.position.z += motion.speed * delta;
-          motion.mesh.position.x += motion.driftX * delta;
-          motion.mesh.position.y += motion.driftY * delta;
-          motion.mesh.rotation.x += motion.spinX * delta;
-          motion.mesh.rotation.y += motion.spinY * delta;
-          if (motion.mesh.position.z > 16) resetAsteroid(motion);
-        });
-
         clouds.forEach((motion) => {
           motion.sprite.position.z += motion.speed * delta;
           motion.sprite.position.x += motion.driftX * delta;
@@ -1213,13 +762,6 @@ export function GalaxyBackground({ onReady }: GalaxyBackgroundProps) {
       disposeObject(dust);
       disposeObject(constellations);
       disposeObject(nebula);
-      disposeObject(saturn);
-      disposeObject(sun);
-      disposeObject(station);
-      disposeObject(moon);
-      disposeObject(planet);
-      asteroidGeometry.dispose();
-      asteroidMaterial.dispose();
       clouds.forEach(({ sprite }) => sprite.material.dispose());
       cloudTexture.dispose();
       starTexture.dispose();
