@@ -1,5 +1,7 @@
 # midya.ca
 
+[![CI](https://github.com/midya8/midya.ca/actions/workflows/ci.yml/badge.svg)](https://github.com/midya8/midya.ca/actions/workflows/ci.yml)
+
 My personal site, live at **[midya.ca](https://midya.ca)**.
 
 ![midya.ca home page](docs/screenshot.jpg)
