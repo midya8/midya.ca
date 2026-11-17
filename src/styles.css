@@ -1846,14 +1846,6 @@ body {
   text-shadow: 0 0 28px rgba(18, 217, 255, 0.16);
 }
 
-.hero__subtitle {
-  margin: 18px 0 0;
-  color: #e8f8ff;
-  font-size: clamp(1.02rem, 1.8vw, 1.25rem);
-  font-weight: 600;
-  line-height: 1.45;
-}
-
 .hero__lede {
   max-width: 570px;
   margin: 24px 0 0;
@@ -2223,10 +2215,6 @@ body {
 
   .hero h1 {
     font-size: clamp(2.5rem, 12.5vw, 3.2rem);
-  }
-
-  .hero__subtitle {
-    font-size: 1rem;
   }
 
   .hero__actions {

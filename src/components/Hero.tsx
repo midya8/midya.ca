@@ -22,9 +22,6 @@ export function Hero() {
           <motion.h1 id="hero-title" variants={rise}>
             Midya Rahmani
           </motion.h1>
-          <motion.p className="hero__subtitle" variants={rise}>
-            Technology, AI, and thoughtful experimentation
-          </motion.p>
           <motion.p className="hero__lede" variants={rise}>
             {profile.hero}
           </motion.p>
