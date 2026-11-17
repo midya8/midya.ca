@@ -62,6 +62,13 @@ export function Contact() {
             </span>
             <b aria-hidden="true">↗</b>
           </a>
+          <a href={profile.github} target="_blank" rel="noopener noreferrer">
+            <span>
+              <small>GitHub</small>
+              github.com/midya8
+            </span>
+            <b aria-hidden="true">↗</b>
+          </a>
         </div>
       </motion.div>
 

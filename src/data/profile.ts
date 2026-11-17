@@ -20,6 +20,7 @@ export const profile = {
   location: "Toronto, Ontario",
   yearsExperience: "12+",
   linkedin: "https://www.linkedin.com/in/midyarahmani/",
+  github: "https://github.com/midya8",
   email: {
     user: "midya.ra",
     domain: "gmail.com",
