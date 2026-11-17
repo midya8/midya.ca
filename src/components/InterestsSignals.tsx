@@ -7,7 +7,7 @@ export function InterestsSignals() {
   return (
     <section className="section" id="interests">
       <SectionHeader
-        number="04"
+        number="05"
         eyebrow="Personal interests"
         title="Beyond work"
         description="The topics and activities I keep returning to, from markets and technology to movement and exploration."

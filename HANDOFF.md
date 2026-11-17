@@ -68,7 +68,9 @@ Keep the profile generic unless Midya asks otherwise:
 
 - Organizations: Adaptavist, CIBC, and Group of Gold Line
 - Show dates and locations, but no role titles, skills grid, certifications,
-  projects, or role-specific claims
+  or role-specific claims
+- Projects: a curated set of GitHub repos lives in `profile.projects` and
+  renders in the "Selected GitHub projects" section (Midya asked for it)
 - Keep visible copy professionally neutral; the visual design can remain cosmic
   without space-themed labels, metaphors, or status language
 - Education: University of Waterloo, GPA `3.9 / 4.0`; York University,

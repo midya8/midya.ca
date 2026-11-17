@@ -15,6 +15,14 @@ export type Education = {
   label: string;
 };
 
+export type Project = {
+  name: string;
+  repo: string;
+  summary: string;
+  tags: string[];
+  demo?: string;
+};
+
 export const profile = {
   name: "Midya Rahmani",
   location: "Toronto, Ontario",
@@ -70,6 +78,57 @@ export const profile = {
       label: "Undergraduate studies",
     },
   ] satisfies Education[],
+  githubRepoCount: "100+",
+  projects: [
+    {
+      name: "ScratchGPT",
+      repo: "scratchgpt",
+      summary:
+        "A small GPT built and trained from scratch in pure NumPy, with its own autograd engine, a trained 419K-parameter character model and a KV-cache inference path. No PyTorch or JAX.",
+      tags: ["Transformers", "NumPy", "Autograd"],
+      demo: "https://midya8.github.io/scratchgpt/",
+    },
+    {
+      name: "EvalForge",
+      repo: "evalforge",
+      summary:
+        "Local-first evaluation for LLM and agent outputs: deterministic checks, regression gates between runs, and HTML, JUnit and SARIF reports for CI.",
+      tags: ["LLM evaluation", "Agents", "CI"],
+      demo: "https://midya8.github.io/evalforge/",
+    },
+    {
+      name: "AgentTrace",
+      repo: "agenttrace",
+      summary:
+        "Validates and analyzes AI agent execution traces: step timing, overlapping spans, loops, errors, tokens and cost, with pass/fail gates and HTML reports.",
+      tags: ["Agents", "Observability", "Python"],
+      demo: "https://midya8.github.io/agenttrace/",
+    },
+    {
+      name: "MoeLab",
+      repo: "mixture-of-experts",
+      summary:
+        "A mixture-of-experts model in pure Python with Switch-style sparse routing, hand-derived gradients verified by finite differences, and a trained dense baseline.",
+      tags: ["Mixture of experts", "Routing", "From scratch"],
+      demo: "https://midya8.github.io/mixture-of-experts/",
+    },
+    {
+      name: "LoRALab",
+      repo: "lora-finetuning",
+      summary:
+        "Low-rank adaptation from scratch: freeze a trained model, learn only a rank-r update, and compare accuracy, retention and trainable parameters with full fine-tuning.",
+      tags: ["LoRA", "Fine-tuning", "From scratch"],
+      demo: "https://midya8.github.io/lora-finetuning/",
+    },
+    {
+      name: "SpecLab",
+      repo: "speculative-decoding",
+      summary:
+        "Speculative decoding with small models whose outputs can be checked exactly: a greedy n-gram decoder, an exact stochastic sampler and an interactive stopping lab.",
+      tags: ["Inference", "Decoding", "LLMs"],
+      demo: "https://midya8.github.io/speculative-decoding/",
+    },
+  ] satisfies Project[],
   interests: [
     "Artificial intelligence",
     "Investing",

@@ -29,7 +29,7 @@ export function Contact() {
   return (
     <section className="section section--contact" id="contact">
       <SectionHeader
-        number="05"
+        number="06"
         eyebrow="Get in touch"
         title="Start a conversation"
         description="Open to conversation, connection, and thoughtful collaboration."

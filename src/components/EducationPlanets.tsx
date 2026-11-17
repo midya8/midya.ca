@@ -6,7 +6,7 @@ export function EducationPlanets() {
   return (
     <section className="section" id="education">
       <SectionHeader
-        number="03"
+        number="04"
         eyebrow="Academic background"
         title="Education"
         description="Graduate and undergraduate studies from two Canadian universities."

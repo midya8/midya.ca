@@ -5,6 +5,7 @@ import { Contact } from "./components/Contact";
 import { EducationPlanets } from "./components/EducationPlanets";
 import { ExperienceOrbit } from "./components/ExperienceOrbit";
 import { GalaxyBackground } from "./components/GalaxyBackground";
+import { GitHubProjects } from "./components/GitHubProjects";
 import { Hero } from "./components/Hero";
 import { InterestsSignals } from "./components/InterestsSignals";
 import { Navigation } from "./components/Navigation";
@@ -90,6 +91,7 @@ function App() {
         <Hero />
         <About />
         <ExperienceOrbit />
+        <GitHubProjects />
         <EducationPlanets />
         <InterestsSignals />
         <Contact />

@@ -1908,20 +1908,27 @@ body {
   justify-self: center;
 }
 
+/* The dark gap, cyan ring and glow are drawn on the photo itself so they
+   always stay concentric with it; a separate padded frame drifted off-centre
+   by a pixel or two in mobile Safari. */
 .portrait-frame {
   width: 100%;
-  padding: 4px;
-  background: rgba(0, 8, 16, 0.76);
-  border: 2px solid rgba(18, 217, 255, 0.85);
-  box-shadow:
-    0 0 24px rgba(18, 217, 255, 0.42),
-    0 0 72px rgba(18, 217, 255, 0.17),
-    inset 0 0 24px rgba(18, 217, 255, 0.09);
+  padding: 6px;
+  overflow: visible;
+  background: none;
+  border: 0;
+  box-shadow: none;
 }
 
 .portrait-frame img {
+  display: block;
   object-position: 50% 28%;
-  filter: saturate(0.94) contrast(1.04);
+  filter: none;
+  box-shadow:
+    0 0 0 4px rgba(0, 8, 16, 0.92),
+    0 0 0 6px rgba(18, 217, 255, 0.85),
+    0 0 24px 6px rgba(18, 217, 255, 0.42),
+    0 0 72px 6px rgba(18, 217, 255, 0.17);
 }
 
 .portrait-frame__scan {
@@ -2241,5 +2248,136 @@ body {
 @media (max-width: 1000px) {
   .contact-console__links {
     grid-template-columns: 1fr;
+  }
+}
+
+/* Selected GitHub projects */
+.project-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.project-grid > li {
+  min-width: 0;
+}
+
+.project-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 26px;
+  background: linear-gradient(145deg, rgba(5, 12, 23, 0.88), rgba(1, 6, 13, 0.82));
+  border: 1px solid rgba(133, 171, 203, 0.2);
+  border-radius: 12px;
+  backdrop-filter: blur(15px);
+  transition:
+    transform 220ms var(--ease),
+    border-color 220ms ease;
+}
+
+.project-card:hover {
+  border-color: rgba(18, 217, 255, 0.5);
+  transform: translateY(-4px);
+}
+
+.project-card__meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  color: var(--dim);
+  font: 500 0.66rem Inter, "Segoe UI", sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.project-card__meta span:first-child {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.project-card__meta span:last-child {
+  min-width: 0;
+  overflow: hidden;
+  color: rgba(18, 217, 255, 0.75);
+  font-family: "JetBrains Mono", monospace;
+  letter-spacing: 0;
+  text-overflow: ellipsis;
+  text-transform: none;
+  white-space: nowrap;
+}
+
+.project-card h3 {
+  margin: 26px 0 10px;
+  font-size: 1.4rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+
+.project-card p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.92rem;
+  line-height: 1.6;
+}
+
+.project-card__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 18px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.project-card__tags li {
+  padding: 4px 9px;
+  color: var(--muted);
+  font: 500 0.62rem "JetBrains Mono", monospace;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+}
+
+.project-card__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  margin-top: auto;
+  padding-top: 22px;
+}
+
+.project-card__links a {
+  color: var(--cyan);
+  font: 600 0.8rem Inter, "Segoe UI", sans-serif;
+  text-decoration: none;
+}
+
+.project-card__links a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.project-more {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+@media (max-width: 1000px) {
+  .project-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .project-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .project-card {
+    padding: 22px;
   }
 }
