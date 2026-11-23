@@ -15,12 +15,28 @@ export type Education = {
   label: string;
 };
 
+export type ProjectLink = {
+  label: string;
+  href: string;
+};
+
 export type Project = {
   name: string;
   repo: string;
+  /** What it is, in one plain sentence. */
   summary: string;
+  /** What it shows about how I work. */
+  shows: string;
   tags: string[];
-  demo?: string;
+  /** The first link is the primary action. */
+  links: ProjectLink[];
+  /** Short, checkable facts. Shown on the lead (first) card only. */
+  highlights?: string[];
+};
+
+export type SideProject = {
+  repo: string;
+  summary: string;
 };
 
 export const profile = {
@@ -78,57 +94,125 @@ export const profile = {
       label: "Undergraduate studies",
     },
   ] satisfies Education[],
-  githubRepoCount: "100+",
   projects: [
-    {
-      name: "ScratchGPT",
-      repo: "scratchgpt",
-      summary:
-        "A small GPT built and trained from scratch in pure NumPy, with its own autograd engine, a trained 419K-parameter character model and a KV-cache inference path. No PyTorch or JAX.",
-      tags: ["Transformers", "NumPy", "Autograd"],
-      demo: "https://midya8.github.io/scratchgpt/",
-    },
     {
       name: "EvalForge",
       repo: "evalforge",
       summary:
-        "Local-first evaluation for LLM and agent outputs: deterministic checks, regression gates between runs, and HTML, JUnit and SARIF reports for CI.",
-      tags: ["LLM evaluation", "Agents", "CI"],
-      demo: "https://midya8.github.io/evalforge/",
+        "Tests an AI model's answers against a set of tasks, compares runs, and fails the build when quality drops.",
+      shows:
+        "Treating AI quality like any other release check: measured, compared and gated in CI.",
+      tags: ["LLM evaluation", "CI", "Python"],
+      links: [
+        { label: "Code", href: "https://github.com/midya8/evalforge" },
+        { label: "Sample report", href: "https://midya8.github.io/evalforge/original-report.html" },
+      ],
+      highlights: [
+        "Works with any model or agent you can run from the command line.",
+        "Fails the build when the average score drops past a set limit or a passing task starts failing.",
+        "Writes HTML, JUnit, SARIF and Markdown reports for CI dashboards.",
+        "More than 100 automated tests, run in CI on Python 3.10 to 3.13.",
+      ],
     },
     {
       name: "AgentTrace",
       repo: "agenttrace",
       summary:
-        "Validates and analyzes AI agent execution traces: step timing, overlapping spans, loops, errors, tokens and cost, with pass/fail gates and HTML reports.",
-      tags: ["Agents", "Observability", "Python"],
-      demo: "https://midya8.github.io/agenttrace/",
+        "Reads the step-by-step log of an AI agent run and reports errors, loops, time and cost.",
+      shows:
+        "Watching AI agents the way you would watch any production service: errors, latency and cost.",
+      tags: ["AI agents", "Observability", "Python"],
+      links: [
+        { label: "Code", href: "https://github.com/midya8/agenttrace" },
+        { label: "Sample report", href: "https://midya8.github.io/agenttrace/original-report.html" },
+      ],
     },
     {
-      name: "MoeLab",
-      repo: "mixture-of-experts",
+      name: "kurdistansociology.com",
+      repo: "kurdistansociology-website",
       summary:
-        "A mixture-of-experts model in pure Python with Switch-style sparse routing, hand-derived gradients verified by finite differences, and a trained dense baseline.",
-      tags: ["Mixture of experts", "Routing", "From scratch"],
-      demo: "https://midya8.github.io/mixture-of-experts/",
+        "Live website for the Kurdistan International Sociological Association, in English and two Kurdish dialects, one of them written right to left.",
+      shows:
+        "Delivering for a real organization: built, deployed and live on its own domain.",
+      tags: ["Next.js", "Three languages", "Live site"],
+      links: [
+        { label: "Live site", href: "https://kurdistansociology.com" },
+        { label: "Code", href: "https://github.com/midya8/kurdistansociology-website" },
+      ],
     },
     {
-      name: "LoRALab",
-      repo: "lora-finetuning",
+      name: "ScratchGPT",
+      repo: "scratchgpt",
       summary:
-        "Low-rank adaptation from scratch: freeze a trained model, learn only a rank-r update, and compare accuracy, retention and trainable parameters with full fine-tuning.",
-      tags: ["LoRA", "Fine-tuning", "From scratch"],
-      demo: "https://midya8.github.io/lora-finetuning/",
+        "A small GPT language model written and trained from scratch in NumPy, with no PyTorch. The trained model ships with the code, so you can sample it right away.",
+      shows:
+        "Knowing how language models work on the inside, not just how to call them.",
+      tags: ["Language models", "NumPy", "From scratch"],
+      links: [{ label: "Code", href: "https://github.com/midya8/scratchgpt" }],
     },
     {
-      name: "SpecLab",
-      repo: "speculative-decoding",
+      name: "PromptGuard",
+      repo: "promptguard",
       summary:
-        "Speculative decoding with small models whose outputs can be checked exactly: a greedy n-gram decoder, an exact stochastic sampler and an interactive stopping lab.",
-      tags: ["Inference", "Decoding", "LLMs"],
-      demo: "https://midya8.github.io/speculative-decoding/",
+        "Scans prompt files for leaked API keys, personal data and prompt-injection text before they ship.",
+      shows:
+        "Security and privacy guardrails for AI work, in a format GitHub code scanning can read.",
+      tags: ["AI security", "Privacy", "CI"],
+      links: [{ label: "Code", href: "https://github.com/midya8/promptguard" }],
+    },
+    {
+      name: "LogLens",
+      repo: "loglens",
+      summary:
+        "Answers the first questions in an outage from web server logs: what is failing, where, and since when.",
+      shows:
+        "Production incident habits, packaged as a tested command-line tool with no dependencies.",
+      tags: ["Incident response", "Python", "CLI"],
+      links: [{ label: "Code", href: "https://github.com/midya8/loglens" }],
     },
   ] satisfies Project[],
+  alsoBuilt: [
+    {
+      repo: "planbench",
+      summary:
+        "Checks an AI agent's task plan for cycles and missing inputs, then simulates it with unreliable tools.",
+    },
+    {
+      repo: "sre-toolkit",
+      summary:
+        "Error budgets, burn-rate alerts, alert triage and postmortem drafts for teams that run services.",
+    },
+    {
+      repo: "flowkit",
+      summary:
+        "A small workflow runner: jobs defined in JSON, with dependencies, retries, timeouts and a clear pass or fail.",
+    },
+    {
+      repo: "ragline",
+      summary:
+        "A RAG pipeline's retrieve, answer, cite and check loop in plain Python, with no language model, built to catch answers that cite the wrong source.",
+    },
+    {
+      repo: "structgate",
+      summary:
+        "Makes a small text generator always produce valid JSON (40 of 40, up from 3 of 40) and measures what that costs.",
+    },
+    {
+      repo: "speculative-decoding",
+      summary:
+        "Draft-and-verify text generation on small models, with tests that the output matches what the main model alone would produce.",
+    },
+    {
+      repo: "mamba-lite",
+      summary:
+        "A Mamba-style sequence model in NumPy. Removing its key feature drops full-sequence accuracy from 97% to 0%.",
+    },
+    {
+      repo: "ppo-numpy",
+      summary:
+        "A reinforcement-learning agent, written from scratch in NumPy, that learns to balance a pole.",
+    },
+  ] satisfies SideProject[],
   interests: [
     "Artificial intelligence",
     "Investing",

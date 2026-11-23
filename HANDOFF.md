@@ -70,7 +70,9 @@ Keep the profile generic unless Midya asks otherwise:
 - Show dates and locations, but no role titles, skills grid, certifications,
   or role-specific claims
 - Projects: a curated set of GitHub repos lives in `profile.projects` and
-  renders in the "Selected GitHub projects" section (Midya asked for it)
+  renders in the "Things I've built" section: the first item is the full-width
+  lead card, the next two are wide cards, the rest are standard cards.
+  `alsoBuilt` feeds the compact "Also built" list (phones show 3, then a toggle).
 - Keep visible copy professionally neutral; the visual design can remain cosmic
   without space-themed labels, metaphors, or status language
 - Education: University of Waterloo, GPA `3.9 / 4.0`; York University,
